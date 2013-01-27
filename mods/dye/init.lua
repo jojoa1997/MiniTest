@@ -90,7 +90,8 @@ for _, row in ipairs(dyelocal.dyes) do
 	minetest.register_craftitem(item_name, {
 		inventory_image = item_image,
 		description = description,
-		groups = groups
+		groups = groups,
+		stack_max = 64,
 	})
 end
 

@@ -100,6 +100,7 @@ minetest.register_node("tnt:tnt", {
 	tiles = {"tnt_top.png", "tnt_bottom.png", "tnt_side.png"},
 	groups = {dig_immediate=2, mesecon=2},
 	sounds = default.node_sound_wood_defaults(),
+	stack_max = 64,
 	
 	on_punch = function(pos, node, puncher)
 		if puncher:get_wielded_item():get_name() == "default:torch" then
@@ -190,6 +191,7 @@ minetest.register_node("tnt:gunpowder", {
 	tiles = {"tnt_gunpowder.png",},
 	inventory_image = "tnt_gunpowder_inventory.png",
 	wield_image = "tnt_gunpowder_inventory.png",
+	stack_max = 64,
 	selection_box = {
 		type = "fixed",
 		fixed = {-1/2, -1/2, -1/2, 1/2, -1/2+1/16, 1/2},

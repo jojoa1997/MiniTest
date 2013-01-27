@@ -23,6 +23,7 @@ minetest.register_node("workbench:3x3", {
 	groups = {cracky=2},
 	legacy_facedir_simple = true,
 	sounds = default.node_sound_wood_defaults(),
+	stack_max = 64,
 	on_construct = function(pos)
 		local meta = minetest.env:get_meta(pos)
 		meta:set_string("formspec",

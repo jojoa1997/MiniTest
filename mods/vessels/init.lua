@@ -6,6 +6,7 @@ minetest.register_craftitem("vessels:glass_bottle", {
 	inventory_image = "vessels_glass_bottle_inv.png",
 	wield_image = "vessels_glass_bottle.png",
 	groups = {vessel=1},
+	stack_max = 64,
 })
 
 minetest.register_craft( {
@@ -22,6 +23,7 @@ minetest.register_craftitem("vessels:drinking_glass", {
 	inventory_image = "vessels_drinking_glass_inv.png",
 	wield_image = "vessels_drinking_glass.png",
 	groups = {vessel=1},
+	stack_max = 64,
 })
 
 minetest.register_craft( {
@@ -38,6 +40,7 @@ minetest.register_craftitem("vessels:steel_bottle", {
 	inventory_image = "vessels_steel_bottle_inv.png",
 	wield_image = "vessels_steel_bottle.png",
 	groups = {vessel=1},
+	stack_max = 64,
 })
 
 minetest.register_craft( {

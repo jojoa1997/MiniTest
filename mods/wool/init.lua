@@ -35,6 +35,7 @@ for _, row in ipairs(wool.dyes) do
 		description = desc.." Wool",
 		tiles = {"wool_"..name..".png"},
 		groups = {snappy=2,choppy=2,oddly_breakable_by_hand=3,flammable=3,wool=1},
+		stack_max = 64,
 	})
 	if craft_color_group then
 		-- Crafting from dye and white wool

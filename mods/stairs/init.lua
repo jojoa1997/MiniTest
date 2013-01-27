@@ -14,6 +14,7 @@ function stairs.register_stair(subname, recipeitem, groups, images, description,
 		is_ground_content = true,
 		groups = groups,
 		sounds = sounds,
+		stack_max = 64,
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -58,6 +59,7 @@ function stairs.register_stair(subname, recipeitem, groups, images, description,
 		is_ground_content = true,
 		groups = groups,
 		sounds = sounds,
+		stack_max = 64,
 		node_box = {
 			type = "fixed",
 			fixed = {
@@ -104,6 +106,7 @@ function stairs.register_slab(subname, recipeitem, groups, images, description, 
 		is_ground_content = true,
 		groups = groups,
 		sounds = sounds,
+		stack_max = 64,
 		node_box = {
 			type = "fixed",
 			fixed = {-0.5, -0.5, -0.5, 0.5, 0, 0.5},
@@ -200,6 +203,7 @@ function stairs.register_slab(subname, recipeitem, groups, images, description, 
 		is_ground_content = true,
 		groups = groups,
 		sounds = sounds,
+		stack_max = 64,
 		node_box = {
 			type = "fixed",
 			fixed = {-0.5, 0, -0.5, 0.5, 0.5, 0.5},
