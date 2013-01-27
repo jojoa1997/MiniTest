@@ -1,7 +1,14 @@
-Minetest 0.4 mod: dye
-======================
+Minetest 0.4 mod: creative
+==========================
 
-See init.lua for documentation.
+Implements creative mode.
+
+Switch on by using the "creative_mode" setting.
+
+Registered items that
+- have a description, and
+- do not have the group not_in_creative_inventory
+are added to the creative inventory.
 
 License of source code and media files:
 ---------------------------------------

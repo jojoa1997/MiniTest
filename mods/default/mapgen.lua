@@ -29,7 +29,7 @@ minetest.register_alias("mapgen_desert_stone", "default:desert_stone")
 -- Ore generation
 --
 
-local function generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, chunk_size, ore_per_chunk, height_min, height_max)
+function default.generate_ore(name, wherein, minp, maxp, seed, chunks_per_volume, chunk_size, ore_per_chunk, height_min, height_max)
 	if maxp.y < height_min or minp.y > height_max then
 		return
 	end
@@ -69,14 +69,26 @@ end
 function default.make_papyrus(pos, size)
 	for y=0,size-1 do
 		local p = {x=pos.x, y=pos.y+y, z=pos.z}
-		minetest.env:set_node(p, {name="default:papyrus"})
+		local nn = minetest.env:get_node(p).name
+		if minetest.registered_nodes[nn] and
+			minetest.registered_nodes[nn].buildable_to then
+			minetest.env:set_node(p, {name="default:papyrus"})
+		else
+			return
+		end
 	end
 end
 
 function default.make_cactus(pos, size)
 	for y=0,size-1 do
 		local p = {x=pos.x, y=pos.y+y, z=pos.z}
-		minetest.env:set_node(p, {name="default:cactus"})
+		local nn = minetest.env:get_node(p).name
+		if minetest.registered_nodes[nn] and
+			minetest.registered_nodes[nn].buildable_to then
+			minetest.env:set_node(p, {name="default:cactus"})
+		else
+			return
+		end
 	end
 end
 
@@ -130,15 +142,17 @@ end
 
 minetest.register_on_generated(function(minp, maxp, seed)
 	-- Generate regular ores
-	generate_ore("default:stone_with_coal", "default:stone", minp, maxp, seed+0, 1/8/8/8,    3, 8, -31000,  64)
-	generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+1, 1/12/12/12, 2, 3,    -15,   2)
-	generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+2, 1/9/9/9,    3, 5,    -63, -16)
-	generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+3, 1/7/7/7,    3, 5, -31000, -64)
-	generate_ore("default:mese",            "default:stone", minp, maxp, seed+4, 1/16/16/16, 2, 3,   -127, -64)
-	generate_ore("default:mese",            "default:stone", minp, maxp, seed+5, 1/9/9/9,    3, 5, -31000,-128)
+	default.generate_ore("default:stone_with_coal", "default:stone", minp, maxp, seed+0, 1/8/8/8,    3, 8, -31000,  64)
+	default.generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+1, 1/12/12/12, 2, 3,    -15,   2)
+	default.generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+2, 1/9/9/9,    3, 5,    -63, -16)
+	default.generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+3, 1/7/7/7,    3, 5, -31000, -64)
 	
-	generate_ore("default:stone_with_coal", "default:stone", minp, maxp, seed+7, 1/24/24/24, 6,27, -31000,  0)
-	generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+6, 1/24/24/24, 6,27, -31000, -64)
+	default.generate_ore("default:stone_with_mese", "default:stone", minp, maxp, seed+4, 1/16/16/16, 2, 3,   -127,  -64)
+	default.generate_ore("default:stone_with_mese", "default:stone", minp, maxp, seed+5, 1/9/9/9,    3, 5, -31000, -128)
+	default.generate_ore("default:mese",            "default:stone", minp, maxp, seed+8, 1/16/16/16, 2, 3, -31000,-1024)
+	
+	default.generate_ore("default:stone_with_coal", "default:stone", minp, maxp, seed+7, 1/24/24/24, 6,27, -31000,  0)
+	default.generate_ore("default:stone_with_iron", "default:stone", minp, maxp, seed+6, 1/24/24/24, 6,27, -31000, -64)
 
 	if maxp.y >= 2 and minp.y <= 0 then
 		-- Generate clay
@@ -234,7 +248,7 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			end
 		end
 		end
-		-- Generate dry shrubs
+		-- Generate grass
 		local perlin1 = minetest.env:get_perlin(329, 3, 0.6, 100)
 		-- Assume X and Z lengths are equal
 		local divlen = 16
@@ -245,11 +259,11 @@ minetest.register_on_generated(function(minp, maxp, seed)
 			local z0 = minp.z + math.floor((divz+0)*divlen)
 			local x1 = minp.x + math.floor((divx+1)*divlen)
 			local z1 = minp.z + math.floor((divz+1)*divlen)
-			-- Determine cactus amount from perlin noise
-			local cactus_amount = math.floor(perlin1:get2d({x=x0, y=z0}) * 5 + 0)
-			-- Find random positions for cactus based on this random
+			-- Determine grass amount from perlin noise
+			local grass_amount = math.floor(perlin1:get2d({x=x0, y=z0}) * 5 + 0)
+			-- Find random positions for grass based on this random
 			local pr = PseudoRandom(seed+1)
-			for i=0,cactus_amount do
+			for i=0,grass_amount do
 				local x = pr:next(x0, x1)
 				local z = pr:next(z0, z1)
 				-- Find ground level (0...15)
@@ -260,10 +274,25 @@ minetest.register_on_generated(function(minp, maxp, seed)
 						break
 					end
 				end
-				-- If desert sand, make cactus
-				if ground_y and minetest.env:get_node({x=x,y=ground_y,z=z}).name == "default:desert_sand" then
-					minetest.env:set_node({x=x,y=ground_y+1,z=z}, {name="default:dry_shrub"})
+				
+				if ground_y then
+					local p = {x=x,y=ground_y+1,z=z}
+					local nn = minetest.env:get_node(p).name
+					-- Check if the node can be replaced
+					if minetest.registered_nodes[nn] and
+						minetest.registered_nodes[nn].buildable_to then
+						nn = minetest.env:get_node({x=x,y=ground_y,z=z}).name
+						-- If desert sand, make dry shrub
+						if nn == "default:desert_sand" then
+							minetest.env:set_node(p,{name="default:dry_shrub"})
+							
+						-- If grass, make junglegrass
+						elseif nn == "default:dirt_with_grass" then
+							minetest.env:set_node(p,{name="default:junglegrass"})
+						end
+					end
 				end
+				
 			end
 		end
 		end
